@@ -190,7 +190,10 @@ unicode-width = "0.1"
 
 base64 = "0.22"
 
+[target.'cfg(any(target_os = "macos", target_arch = "s390x"))'.dependencies]
 mimalloc = { version = "*", optional = true }
+jemalloc-sys = { package = "tikv-jemalloc-sys", version = "0.6.0", features = [
+], optional = true }
 
 # mips
 atomic-shim = "0.2.0"
@@ -297,7 +300,7 @@ winreg = "0.52"
 windows-service = "0.7.0"
 winapi = { version = "0.3.9", features = ["impl-default"] }
 
-[target.'cfg(not(windows))'.dependencies]
+[target.'cfg(all(not(windows), not(target_arch = "s390x")))'.dependencies]
 jemallocator = { package = "tikv-jemallocator", version = "0.6.0", optional = true, features = [
     "unprefixed_malloc_on_supported_platforms",
 ] }
@@ -305,15 +308,13 @@ jemalloc-ctl = { package = "tikv-jemalloc-ctl", version = "0.6.0", optional = tr
     "use_std",
 ] }
 
-[target.'cfg(not(target_os = "macos"))'.dependencies]
+[target.'cfg(all(not(target_os = "macos"), not(target_arch = "s390x")))'.dependencies]
 jemalloc-sys = { package = "tikv-jemalloc-sys", version = "0.6.0", features = [
     "background_threads_runtime_support",
     "background_threads",
 ], optional = true }
 
-[target.'cfg(target_os = "macos")'.dependencies]
-jemalloc-sys = { package = "tikv-jemalloc-sys", version = "0.6.0", features = [
-], optional = true }
+
 
 [build-dependencies]
 cfg_aliases = "0.2.1"

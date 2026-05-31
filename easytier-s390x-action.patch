@@ -1,0 +1,24 @@
+diff --git a/.github/workflows/core.yml b/.github/workflows/core.yml
+index 033952c..5a72725 100644
+--- a/.github/workflows/core.yml
++++ b/.github/workflows/core.yml
+@@ -74,6 +74,10 @@ jobs:
+             OS: ubuntu-24.04
+             ARTIFACT_NAME: linux-loongarch64
+ 
++          - TARGET: s390x-unknown-linux-gnu
++            OS: ubuntu-24.04
++            ARTIFACT_NAME: linux-s390x
++
+           - TARGET: armv7-unknown-linux-musleabihf # raspberry pi 2-3-4, not tested
+             OS: ubuntu-24.04
+             ARTIFACT_NAME: linux-armv7hf
+@@ -181,7 +185,7 @@ jobs:
+             BUILD=zigbuild
+           fi
+ 
+-          if [[ "$TARGET" =~ ^(riscv64|loongarch64|aarch64).*$ || "$TARGET" =~ (freebsd|windows) ]]; then
++          if [[ "$TARGET" =~ ^(riscv64|loongarch64|aarch64|s390x).*$ || "$TARGET" =~ (freebsd|windows) ]]; then
+             FEATURES="mimalloc"
+           else
+             FEATURES="jemalloc"
