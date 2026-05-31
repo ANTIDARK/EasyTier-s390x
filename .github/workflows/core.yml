@@ -112,8 +112,34 @@ jobs:
             fi
           done
 
+          tar czf ./easytier-s390x-${BUILD_TIME}.tar.gz -C ./artifacts .
+
       - name: Archive artifact
         uses: actions/upload-artifact@v5
         with:
           name: easytier-${{ env.ARTIFACT_NAME }}-${{ env.BUILD_TIME }}
-          path: ./artifacts/*
+          path: |
+            ./artifacts/*
+            ./easytier-s390x-${{ env.BUILD_TIME }}.tar.gz
+
+      - id: create_github_release
+        name: Create GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: s390x-${{ env.BUILD_TIME }}
+          release_name: easytier-s390x-${{ env.BUILD_TIME }}
+          body: "Automatic s390x build release for ${{ env.BUILD_TIME }}"
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_github_release.outputs.upload_url }}
+          asset_path: ./easytier-s390x-${{ env.BUILD_TIME }}.tar.gz
+          asset_name: easytier-s390x-${{ env.BUILD_TIME }}.tar.gz
+          asset_content_type: application/gzip
